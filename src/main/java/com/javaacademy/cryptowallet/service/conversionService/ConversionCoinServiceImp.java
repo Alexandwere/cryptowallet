@@ -1,4 +1,4 @@
-package com.javaacademy.cryptowallet.service;
+package com.javaacademy.cryptowallet.service.conversionService;
 
 import com.javaacademy.cryptowallet.config.ConversionProperties;
 import com.javaacademy.cryptowallet.entity.CoinType;
@@ -14,7 +14,8 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 
 @Service
-public class ConversionCoinService {
+@Profile("prod")
+public class ConversionCoinServiceImp implements ConversionCoinService {
     private static final String CURRENCY = "usd";
     private static final String REQUEST_PART = "/simple/price?ids=";
     private static final String CURRENCY_PARAMETER = "&vs_currencies=usd";
@@ -23,7 +24,6 @@ public class ConversionCoinService {
     private ConversionProperties properties;
 
     @SneakyThrows
-    @Profile("prod")
     public BigDecimal costCoin(CoinType coinType) {
         Request request = new Request.Builder()
                 .url(properties.getSiteApi() + REQUEST_PART + coinType.getDescription() + CURRENCY_PARAMETER)

@@ -1,4 +1,4 @@
-package com.javaacademy.cryptowallet.service;
+package com.javaacademy.cryptowallet.service.conversionService;
 
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,11 +9,11 @@ import java.math.BigDecimal;
 
 @Service
 @Profile("local")
-public class LocalConversionRubUsdService {
+public class LocalConversionRubUsdServiceImp {
     @Value("app.exchange.standard-usd-cost")
     private BigDecimal standardPrice;
 
-    public BigDecimal convertedToRub(@NonNull BigDecimal countUsd) {
+    public BigDecimal convertToRub(@NonNull BigDecimal countUsd) {
         return countUsd.divide(standardPrice);
     }
 }

@@ -1,4 +1,4 @@
-package com.javaacademy.cryptowallet.service;
+package com.javaacademy.cryptowallet.service.conversionService;
 
 import com.jayway.jsonpath.JsonPath;
 import lombok.Cleanup;
@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 
 @Service
 @Profile("prod")
-public class ConversionRubUsdService {
+public class ConversionRubUsdServiceImp implements ConversionRubUsdService {
     private static final String CRB_URL = "https://www.cbr-xml-daily.ru/latest.js";
     private static final String RATES = "rates";
     private static final String CURRENCY = "USD";
