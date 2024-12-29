@@ -1,0 +1,4 @@
+app:
+  site-api: https://api.coingecko.com/api/v3
+  header-key: x_cg_demo_api_key
+  header-value: xCVqoMDWXQpoSpqNTCshp5Ua

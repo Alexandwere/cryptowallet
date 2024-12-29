@@ -1,0 +1,4 @@
+app:
+  exchange:
+    standard-coin-cost: 10_000
+    standard-usd-cost: 100
