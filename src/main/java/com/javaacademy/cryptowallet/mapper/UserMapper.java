@@ -12,6 +12,6 @@ public class UserMapper {
     }
 
     public UserDto convertToUserDto(User user) {
-        return new UserDto(user.getLogin(), user.getEmail(), user.getPassword());
+        return UserDto.builder().login(user.getLogin()).build();
     }
 }

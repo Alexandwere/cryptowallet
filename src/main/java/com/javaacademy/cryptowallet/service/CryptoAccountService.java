@@ -7,12 +7,14 @@ import com.javaacademy.cryptowallet.repository.CryptoAccountRepository;
 import com.javaacademy.cryptowallet.service.conversionService.ConversionCoinService;
 import com.javaacademy.cryptowallet.service.conversionService.ConversionRubUsdService;
 import com.javaacademy.cryptowallet.service.util.UserUtil;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +29,9 @@ public class CryptoAccountService {
         return cryptoAccountMapper.convertToDto(cryptoAccountRepository.findAccount(uuid));
     }
 
+    /**
+     Поиск всех криптосчетов пользователя
+     */
     public List<CryptoAccountDto> findAllForUser(String login) {
         UserUtil.checkUserPresence(login);
         return cryptoAccountRepository.findAllForUser(login).stream()
@@ -39,24 +44,55 @@ public class CryptoAccountService {
         return cryptoAccountMapper.convertToAccount(cryptoAccountDto).getUuid();
     }
 
+    /**
+     Пополнение счёта в рублях
+     */
     public void topUpInRub(UUID uuid, BigDecimal countRub) {
         CryptoAccount account = cryptoAccountRepository.findAccount(uuid);
-        account.setValueCoin(account.getValueCoin().add(coinCost(account, countRub)));
+        account.setValueCoin(account.getValueCoin().add(valueCoin(account, countRub)));
     }
 
+    /**
+     Снять рубли со счёта
+     */
     public String withdrawRub(UUID uuid, BigDecimal countRub) {
         CryptoAccount account = cryptoAccountRepository.findAccount(uuid);
-        BigDecimal costCoin = coinCost(account, countRub);
-        if (rubUsdService.convertToUsd(countRub).compareTo(costCoin) < 0) {
+        BigDecimal countCoin = valueCoin(account, countRub);
+        if (rubUsdService.convertToUsd(countRub).compareTo(countCoin) < 0) {
             throw new RuntimeException("Операция отклонена, на счёте недостаточно средств");
         }
-        account.setValueCoin(account.getValueCoin().subtract(coinCost(account, countRub)));
-        return String.format("Операция прошла успешно. Продано %s %s.", costCoin, account.getValueCoin());
+        account.setValueCoin(account.getValueCoin().subtract(valueCoin(account, countRub)));
+        return String.format("Операция прошла успешно. Продано %s %s.", countCoin, account.getValueCoin());
     }
 
-    private BigDecimal coinCost(CryptoAccount account, BigDecimal countRub) {
-        BigDecimal coinPrice = coinService.costCoin(account.getCoinType());
-        BigDecimal dollars = rubUsdService.convertToUsd(countRub);
-        return dollars.divide(coinPrice);
+    /**
+     Получение баланса в рублях (добавить проверку на отрицательный баланс?)
+     */
+    public BigDecimal balanceRub(@NonNull UUID uuid) {
+        CryptoAccount account = cryptoAccountRepository.findAccount(uuid);
+        BigDecimal coinUsdPrice = coinService.costCoin(account.getCoinType());
+        BigDecimal balanceInUsd = account.getValueCoin().multiply(coinUsdPrice);
+        return rubUsdService.convertToRub(balanceInUsd);
     }
+
+    /**
+     Получение баланса всех счетов пользователя
+     */
+    public BigDecimal allBalanceRub(@NonNull String login) {
+        UserUtil.checkUserPresence(login);
+        List<CryptoAccount> accountsByLogin = cryptoAccountRepository.findAllForUser(login);
+        AtomicReference<BigDecimal> balanceCoin = new AtomicReference<>(BigDecimal.ZERO);
+        accountsByLogin.stream().forEach(e -> balanceCoin.set(balanceCoin.get().add(balanceRub(e.getUuid()))));
+        return balanceCoin.get();
+    }
+
+    /**
+     Получение количества криптовалюты за рубли
+     */
+    private BigDecimal valueCoin(CryptoAccount account, BigDecimal countRub) {
+        BigDecimal coinUsdPrice = coinService.costCoin(account.getCoinType());
+        BigDecimal dollars = rubUsdService.convertToUsd(countRub);
+        return dollars.divide(coinUsdPrice);
+    }
+
 }
