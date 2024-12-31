@@ -13,6 +13,6 @@ import java.math.BigDecimal;
 public class RefillWithdrawBodyDto {
     @JsonProperty("account_id")
     private String uuid;
-    @JsonProperty("account_rubles")
+    @JsonProperty("amount_rubles")
     private BigDecimal amountRubles;
 }

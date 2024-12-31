@@ -3,6 +3,7 @@ package com.javaacademy.cryptowallet.service.conversionService;
 import com.javaacademy.cryptowallet.config.ConversionProperties;
 import com.javaacademy.cryptowallet.entity.CoinType;
 import com.jayway.jsonpath.JsonPath;
+import lombok.AllArgsConstructor;
 import lombok.Cleanup;
 import lombok.SneakyThrows;
 import okhttp3.OkHttpClient;
@@ -15,6 +16,7 @@ import java.math.BigDecimal;
 
 @Service
 @Profile("prod")
+@AllArgsConstructor
 public class ConversionCoinServiceImp implements ConversionCoinService {
     private static final String CURRENCY = "usd";
     private static final String REQUEST_PART = "/simple/price?ids=";

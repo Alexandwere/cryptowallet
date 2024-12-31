@@ -21,9 +21,8 @@ import java.util.concurrent.atomic.AtomicReference;
 public class CryptoAccountService {
     private final CryptoAccountRepository cryptoAccountRepository;
     private final CryptoAccountMapper cryptoAccountMapper;
-    private final UserService userService;
-    private final ConversionCoinService coinService;
-    private final ConversionRubUsdService rubUsdService;
+    private final ConversionCoinService conversionCoinService;
+    private final ConversionRubUsdService conversionRubUsdService;
 
     public CryptoAccountDto findAccount(UUID uuid) {
         return cryptoAccountMapper.convertToDto(cryptoAccountRepository.findAccount(uuid));
@@ -58,7 +57,7 @@ public class CryptoAccountService {
     public String withdrawRub(UUID uuid, BigDecimal countRub) {
         CryptoAccount account = cryptoAccountRepository.findAccount(uuid);
         BigDecimal countCoin = valueCoin(account, countRub);
-        if (rubUsdService.convertToUsd(countRub).compareTo(countCoin) < 0) {
+        if (conversionRubUsdService.convertToUsd(countRub).compareTo(countCoin) < 0) {
             throw new RuntimeException("Операция отклонена, на счёте недостаточно средств");
         }
         account.setValueCoin(account.getValueCoin().subtract(valueCoin(account, countRub)));
@@ -70,9 +69,9 @@ public class CryptoAccountService {
      */
     public BigDecimal balanceRub(@NonNull UUID uuid) {
         CryptoAccount account = cryptoAccountRepository.findAccount(uuid);
-        BigDecimal coinUsdPrice = coinService.costCoin(account.getCoinType());
+        BigDecimal coinUsdPrice = conversionCoinService.costCoin(account.getCoinType());
         BigDecimal balanceInUsd = account.getValueCoin().multiply(coinUsdPrice);
-        return rubUsdService.convertToRub(balanceInUsd);
+        return conversionRubUsdService.convertToRub(balanceInUsd);
     }
 
     /**
@@ -90,8 +89,8 @@ public class CryptoAccountService {
      Получение количества криптовалюты за рубли
      */
     private BigDecimal valueCoin(CryptoAccount account, BigDecimal countRub) {
-        BigDecimal coinUsdPrice = coinService.costCoin(account.getCoinType());
-        BigDecimal dollars = rubUsdService.convertToUsd(countRub);
+        BigDecimal coinUsdPrice = conversionCoinService.costCoin(account.getCoinType());
+        BigDecimal dollars = conversionRubUsdService.convertToUsd(countRub);
         return dollars.divide(coinUsdPrice);
     }
 

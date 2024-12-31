@@ -5,5 +5,5 @@ import com.javaacademy.cryptowallet.entity.CoinType;
 import java.math.BigDecimal;
 
 public interface ConversionCoinService {
-    public BigDecimal costCoin(CoinType coinType);
+    BigDecimal costCoin(CoinType coinType);
 }
