@@ -7,6 +7,7 @@ import com.javaacademy.cryptowallet.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,13 +22,15 @@ public class UserController {
     private final CryptoAccountService cryptoAccountService;
 
     @PostMapping("/signup")
-    @Operation(summary = "Управление пользователями", description = "Регистрация пользователя")
+    @Operation(summary = "Регистрация пользователя",
+            description = "Регистрация пользователя, требуется логин, эл. почта и пароль")
     public void save(@RequestBody UserDto userDto) {
         userService.saveUser(userDto);
     }
 
-    @PostMapping("/reset-password")
-    @Operation(summary = "Управление пользователями", description = "Смена пароля")
+    @PatchMapping("/reset-password")
+    @Operation(summary = "Смена пароля",
+            description = "Смена пароля пользователя, требуется логин, старый пароль, новый пароль")
     public void resetPassword(@RequestBody ResetPasswordDto resetPasswordDto) {
         userService.resetPassword(resetPasswordDto);
     }

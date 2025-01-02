@@ -10,9 +10,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CryptoAccountDto {
-    @Schema(name = "Логин", description = "логин")
+    @Schema(description = "логин")
     @JsonProperty("username")
     private String login;
+    @Schema(description = "Тип криптовалюты")
     @JsonProperty("crypto_type")
     private String coinType;
 }

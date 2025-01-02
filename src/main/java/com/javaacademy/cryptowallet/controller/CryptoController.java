@@ -22,43 +22,50 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/cryptowallet")
 @RequiredArgsConstructor
-@Tag(name = "Контроллер криптокошельков", description = "Контроллер для управления криптокошельками")
+@Tag(name = "Контроллер криптокошельков", description = "Контроллер для управления криптосчетами")
 public class CryptoController {
     private final CryptoAccountService cryptoAccountService;
 
-    @PostMapping
-    @Operation(summary = "Создание криптосчёта", description = "Создание криптоаккаунта")
-    public UUID createCryptoAccount(@RequestBody CryptoAccountDto accountDto) {
-        return cryptoAccountService.createCryptoAccount(accountDto);
-    }
-
     @GetMapping()
-    @Operation(summary = "Получение криптосчёта", description = "Получение всех криптосчетов")
+    @Operation(summary = "Получение всех криптосчётов пользователя",
+            description = "Получение всех криптосчетов пользователя по его логину")
     public List<CryptoAccountDto> findAll(@PathVariable @RequestParam String login) {
         return cryptoAccountService.findAllForUser(login);
     }
 
-    @PostMapping("/refill")
-    @Operation(summary = "Пополнение счёта", description = "Пополнение счёта за рубли")
-    public void refill(@RequestBody RefillWithdrawBodyDto bodyDto) {
-        cryptoAccountService.topUpInRub(UUID.fromString(bodyDto.getUuid()), bodyDto.getAmountRubles());
-    }
-
-    @PostMapping("/withdrawal")
-    @Operation(summary = "Снятие со счёта", description = "Снятие со счёта в рублях")
-    public String withdraw(@RequestBody RefillWithdrawBodyDto bodyDto) {
-        return cryptoAccountService.withdrawRub(UUID.fromString(bodyDto.getUuid()), bodyDto.getAmountRubles());
-    }
-
     @GetMapping("/balance/{id}")
-    @Operation(summary = "Получение баланса", description = "Получение баланса в рублях")
+    @Operation(summary = "Получение баланса счёта в рублях",
+            description = "Получение баланса счёта по ID в рублях")
     public BigDecimal getBalance(@PathVariable String id) {
         return cryptoAccountService.balanceRub(UUID.fromString(id));
     }
 
     @GetMapping("/balance?username={login}")
-    @Operation(summary = "Получение баланса", description = "Получение баланса всех криптосчетов пользователя")
+    @Operation(summary = "Получение баланса всех счетов пользователя",
+            description = "Получение баланса всех криптосчетов пользователя, требуется логин")
     public BigDecimal getAllBalance(@PathVariable String login) {
         return cryptoAccountService.allBalanceRub(login);
     }
+
+    @PostMapping
+    @Operation(summary = "Создание криптосчёта",
+            description = "Создание крипточсёта, требуется логин и тип криптовалюты")
+    public UUID createCryptoAccount(@RequestBody CryptoAccountDto accountDto) {
+        return cryptoAccountService.createCryptoAccount(accountDto);
+    }
+
+    @PostMapping("/refill")
+    @Operation(summary = "Пополнение счёта в рублях",
+            description = "Пополнение счёта за рубли, требуется ID счёта и сумма в рублях")
+    public void refill(@RequestBody RefillWithdrawBodyDto bodyDto) {
+        cryptoAccountService.topUpInRub(UUID.fromString(bodyDto.getUuid()), bodyDto.getAmountRubles());
+    }
+
+    @PostMapping("/withdrawal")
+    @Operation(summary = "Снятие со счёта в рублях",
+            description = "Снятие со счёта в рублях, требуется ID счёта и сумма в рублях")
+    public String withdraw(@RequestBody RefillWithdrawBodyDto bodyDto) {
+        return cryptoAccountService.withdrawRub(UUID.fromString(bodyDto.getUuid()), bodyDto.getAmountRubles());
+    }
+
 }
