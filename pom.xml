@@ -20,6 +20,7 @@
 		<checkstyle.version>10.14.1</checkstyle.version>
 		<lombok.version>1.18.28</lombok.version>
 		<swagger.version>2.6.0</swagger.version>
+		<rest-assured-test.version>5.4.0</rest-assured-test.version>
 	</properties>
 
 	<dependencies>
@@ -53,6 +54,12 @@
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>${swagger.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>${rest-assured-test.version}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
