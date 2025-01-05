@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Schema(description = "Тело для пополнения и снятия в рублях")
 public class RefillWithdrawBodyDto {
     @Schema(description = "Уникальный номер пользователя")
     @JsonProperty("account_id")

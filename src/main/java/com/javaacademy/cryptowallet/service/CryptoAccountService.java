@@ -33,44 +33,52 @@ public class CryptoAccountService {
      */
     public List<CryptoAccountDto> findAllForUser(String login) {
         UserUtil.checkUserPresence(login);
-        return cryptoAccountRepository.findAllForUser(login).stream()
+        List<CryptoAccountDto> result = cryptoAccountRepository.findAllForUser(login).stream()
                 .map(cryptoAccountMapper::convertToDto).toList();
+        if (result.isEmpty()) {
+            CryptoAccountDto notExistAccount = new CryptoAccountDto("Счетов у пользователя %s не обнаружено"
+                    .formatted(login), "");
+        }
+        return result;
     }
 
-    public UUID createCryptoAccount(CryptoAccountDto cryptoAccountDto) {
+    public UUID createCryptoAccount(@NonNull CryptoAccountDto cryptoAccountDto) {
         UserUtil.checkUserPresence(cryptoAccountDto.getLogin());
-        cryptoAccountRepository.saveCryptoAccount(cryptoAccountMapper.convertToAccount(cryptoAccountDto));
-        return cryptoAccountMapper.convertToAccount(cryptoAccountDto).getUuid();
+        CryptoAccount account = cryptoAccountMapper.convertToAccount(cryptoAccountDto);
+        cryptoAccountRepository.saveCryptoAccount(account);
+        return account.getUuid();
     }
 
     /**
      Пополнение счёта в рублях
      */
     public void topUpInRub(UUID uuid, BigDecimal countRub) {
+        checkAmount(countRub);
         CryptoAccount account = cryptoAccountRepository.findAccount(uuid);
-        account.setValueCoin(account.getValueCoin().add(valueCoin(account, countRub)));
+        account.setBalanceCoin(account.getBalanceCoin().add(valueCoin(account, countRub)));
     }
 
     /**
      Снять рубли со счёта
      */
     public String withdrawRub(UUID uuid, BigDecimal countRub) {
+        checkAmount(countRub);
         CryptoAccount account = cryptoAccountRepository.findAccount(uuid);
-        BigDecimal countCoin = valueCoin(account, countRub);
-        if (conversionRubUsdService.convertToUsd(countRub).compareTo(countCoin) < 0) {
-            throw new RuntimeException("Операция отклонена, на счёте недостаточно средств");
+        BigDecimal countWithdrawalCoin = valueCoin(account, countRub);
+        if (account.getBalanceCoin().compareTo(countWithdrawalCoin) < 0) {
+            return "Операция отклонена, на счёте недостаточно средств";
         }
-        account.setValueCoin(account.getValueCoin().subtract(valueCoin(account, countRub)));
-        return String.format("Операция прошла успешно. Продано %s %s.", countCoin, account.getValueCoin());
+        account.setBalanceCoin(account.getBalanceCoin().subtract(valueCoin(account, countRub)));
+        return String.format("Операция прошла успешно. Продано %s %s.", countWithdrawalCoin, account.getCoinType());
     }
 
     /**
-     Получение баланса в рублях (добавить проверку на отрицательный баланс?)
+     Получение баланса в рублях
      */
     public BigDecimal balanceRub(@NonNull UUID uuid) {
         CryptoAccount account = cryptoAccountRepository.findAccount(uuid);
         BigDecimal coinUsdPrice = conversionCoinService.costCoin(account.getCoinType());
-        BigDecimal balanceInUsd = account.getValueCoin().multiply(coinUsdPrice);
+        BigDecimal balanceInUsd = account.getBalanceCoin().multiply(coinUsdPrice);
         return conversionRubUsdService.convertToRub(balanceInUsd);
     }
 
@@ -80,8 +88,11 @@ public class CryptoAccountService {
     public BigDecimal allBalanceRub(@NonNull String login) {
         UserUtil.checkUserPresence(login);
         List<CryptoAccount> accountsByLogin = cryptoAccountRepository.findAllForUser(login);
+        if (accountsByLogin.isEmpty()) {
+            throw new RuntimeException("У пользователя нет счетов");
+        }
         AtomicReference<BigDecimal> balanceCoin = new AtomicReference<>(BigDecimal.ZERO);
-        accountsByLogin.stream().forEach(e -> balanceCoin.set(balanceCoin.get().add(balanceRub(e.getUuid()))));
+        accountsByLogin.forEach(e -> balanceCoin.set(balanceCoin.get().add(balanceRub(e.getUuid()))));
         return balanceCoin.get();
     }
 
@@ -90,8 +101,17 @@ public class CryptoAccountService {
      */
     private BigDecimal valueCoin(CryptoAccount account, BigDecimal countRub) {
         BigDecimal coinUsdPrice = conversionCoinService.costCoin(account.getCoinType());
-        BigDecimal dollars = conversionRubUsdService.convertToUsd(countRub);
-        return dollars.divide(coinUsdPrice);
+        BigDecimal dollarsOnAccount = conversionRubUsdService.convertToUsd(countRub);
+        return dollarsOnAccount.divide(coinUsdPrice);
+    }
+
+    /**
+     Проверка на отрицательную сумму денег
+     */
+    private void checkAmount(BigDecimal value) {
+        if (value.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new RuntimeException("Нельзя ввести отрицательную сумма");
+        }
     }
 
 }

@@ -5,8 +5,10 @@ import com.javaacademy.cryptowallet.entity.CoinType;
 import com.javaacademy.cryptowallet.entity.CryptoAccount;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class CryptoAccountMapper {
@@ -22,7 +24,9 @@ public class CryptoAccountMapper {
         }
         Optional<CoinType> findCoin = Arrays.stream(CoinType.values())
                 .filter(e -> e.getDescription().equalsIgnoreCase(accountDto.getCoinType())).findFirst();
-
-        return new CryptoAccount(accountDto.getLogin(), findCoin.get());
+        CryptoAccount account = new CryptoAccount(accountDto.getLogin(), findCoin.get());
+        account.setBalanceCoin(BigDecimal.ZERO);
+        account.setUuid(UUID.randomUUID());
+        return account;
     }
 }

@@ -15,6 +15,6 @@ public class UserRepository {
     }
 
     public User getUserByLogin(String login) {
-        return userStorage.getByLogin(login);
+        return userStorage.getUserByLogin(login);
     }
 }

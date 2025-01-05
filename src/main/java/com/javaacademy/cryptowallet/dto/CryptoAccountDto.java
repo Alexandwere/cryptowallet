@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Schema(description = "Криптосчёт")
 public class CryptoAccountDto {
     @Schema(description = "логин")
     @JsonProperty("username")

@@ -17,7 +17,7 @@ public class SwaggerConfig {
                     API для управления криптосчетами и пользователями.
                     Регистрация и управление пользователями.
                     Открытие счетов и проведение по ним операций.""")
-                .contact(new Contact().name("Alexandwere"));
+                .contact(new Contact().name("Alexandwere").url("https://t.me/Alexandwere"));
         return new OpenAPI().info(info);
     }
 

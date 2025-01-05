@@ -5,6 +5,7 @@ import com.javaacademy.cryptowallet.dto.UserDto;
 import com.javaacademy.cryptowallet.entity.User;
 import com.javaacademy.cryptowallet.mapper.UserMapper;
 import com.javaacademy.cryptowallet.repository.UserRepository;
+import com.javaacademy.cryptowallet.service.util.UserUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,11 @@ public class UserService {
     }
 
     public UserDto getUserByLogin(String login) {
-         return userMapper.convertToUserDto(userRepository.getUserByLogin(login));
+        try {
+            return userMapper.convertToUserDto(userRepository.getUserByLogin(login));
+        } catch (Exception e) {
+            return UserDto.builder().login("Пользователь не существует").build();
+        }
     }
 
     public void resetPassword(ResetPasswordDto resetPasswordDto) {
@@ -28,4 +33,5 @@ public class UserService {
             user.setPassword(resetPasswordDto.getNewPass());
         } else throw new RuntimeException("Неправильный пароль. Изменить невозможно.");
     }
+
 }

@@ -20,10 +20,10 @@ public class CryptoAccountStorage {
     }
 
     public CryptoAccount findAccount(UUID uuid) {
-        if (!cryptoAccountMap.containsKey(uuid)) {
-            throw new RuntimeException("Аккаунт не найден");
+        if (cryptoAccountMap.containsKey(uuid)) {
+            return cryptoAccountMap.get(uuid);
         }
-        return cryptoAccountMap.get(uuid);
+        throw new RuntimeException("Аккаунт не найден");
     }
 
     public List<CryptoAccount> findAllFofUser(String login) {

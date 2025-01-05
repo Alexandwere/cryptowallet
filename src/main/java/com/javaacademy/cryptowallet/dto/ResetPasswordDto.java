@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(description = "Тело для смены пароля у пользователя")
 public class ResetPasswordDto {
     @Schema(description = "Логин")
     private String login;
