@@ -1,6 +1,8 @@
 package com.javaacademy.cryptowallet.storage;
 
 import com.javaacademy.cryptowallet.entity.CryptoAccount;
+import com.javaacademy.cryptowallet.exception.AccountAlreadyExistException;
+import com.javaacademy.cryptowallet.exception.AccountNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -14,7 +16,7 @@ public class CryptoAccountStorage {
 
     public void save(CryptoAccount account) {
         if (cryptoAccountMap.containsKey(account.getUuid())) {
-            throw new RuntimeException("Аккаунт уже существует.");
+            throw new AccountAlreadyExistException("Аккаунт уже существует.");
         }
         cryptoAccountMap.put(account.getUuid(), account);
     }
@@ -23,7 +25,7 @@ public class CryptoAccountStorage {
         if (cryptoAccountMap.containsKey(uuid)) {
             return cryptoAccountMap.get(uuid);
         }
-        throw new RuntimeException("Аккаунт не найден");
+        throw new AccountNotFoundException("Аккаунт не найден");
     }
 
     public List<CryptoAccount> findAllFofUser(String login) {

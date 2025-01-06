@@ -3,6 +3,7 @@ package com.javaacademy.cryptowallet.mapper;
 import com.javaacademy.cryptowallet.dto.CryptoAccountDto;
 import com.javaacademy.cryptowallet.entity.CoinType;
 import com.javaacademy.cryptowallet.entity.CryptoAccount;
+import com.javaacademy.cryptowallet.exception.CryptoTypeNotExistException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -18,15 +19,11 @@ public class CryptoAccountMapper {
     }
 
     public CryptoAccount convertToAccount(CryptoAccountDto accountDto) {
-        if (Arrays.stream(CoinType.values())
-                .noneMatch(e -> e.getDescription().equalsIgnoreCase(accountDto.getCoinType()))) {
-            throw new RuntimeException("Данный тип криптовалюты не поддерживается.");
-        }
         Optional<CoinType> findCoin = Arrays.stream(CoinType.values())
                 .filter(e -> e.getDescription().equalsIgnoreCase(accountDto.getCoinType())).findFirst();
-        CryptoAccount account = new CryptoAccount(accountDto.getLogin(), findCoin.get());
-        account.setBalanceCoin(BigDecimal.ZERO);
-        account.setUuid(UUID.randomUUID());
-        return account;
+        if (findCoin.isEmpty()) {
+            throw new CryptoTypeNotExistException("Данный тип криптовалюты не поддерживается.");
+        }
+        return new CryptoAccount(accountDto.getLogin(), findCoin.get());
     }
 }

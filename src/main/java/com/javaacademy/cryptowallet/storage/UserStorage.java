@@ -1,6 +1,8 @@
 package com.javaacademy.cryptowallet.storage;
 
 import com.javaacademy.cryptowallet.entity.User;
+import com.javaacademy.cryptowallet.exception.UserAlreadyExistException;
+import com.javaacademy.cryptowallet.exception.UserNotExistException;
 import org.springframework.stereotype.Component;
 
 import java.io.FileNotFoundException;
@@ -15,12 +17,12 @@ public class UserStorage {
         if (dataUsers.containsKey(login)) {
             return dataUsers.get(login);
         }
-        throw new RuntimeException("Пользователь не существует");
+        throw new UserNotExistException("Пользователь не существует");
     }
 
     public void saveUser(User user) {
         if (dataUsers.containsKey(user.getLogin())) {
-            throw new RuntimeException("Пользователь с таким логином уже существует.");
+            throw new UserAlreadyExistException("Пользователь с таким логином уже существует.");
         }
         dataUsers.put(user.getLogin(), user);
     }

@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 @Data
 @AllArgsConstructor
@@ -13,8 +14,10 @@ import lombok.NoArgsConstructor;
 public class CryptoAccountDto {
     @Schema(description = "логин")
     @JsonProperty("username")
+    @NonNull
     private String login;
     @Schema(description = "Тип криптовалюты")
     @JsonProperty("crypto_type")
+    @NonNull
     private String coinType;
 }

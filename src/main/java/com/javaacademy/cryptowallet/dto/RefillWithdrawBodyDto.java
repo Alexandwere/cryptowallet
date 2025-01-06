@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 import java.math.BigDecimal;
 
@@ -15,8 +16,10 @@ import java.math.BigDecimal;
 public class RefillWithdrawBodyDto {
     @Schema(description = "Уникальный номер пользователя")
     @JsonProperty("account_id")
+    @NonNull
     private String uuid;
     @Schema(description = "Сумма в рублях")
     @JsonProperty("amount_rubles")
+    @NonNull
     private BigDecimal amountRubles;
 }

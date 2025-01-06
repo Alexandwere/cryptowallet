@@ -1,5 +1,6 @@
 package com.javaacademy.cryptowallet.service.util;
 
+import com.javaacademy.cryptowallet.exception.UserNotExistException;
 import com.javaacademy.cryptowallet.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,7 +16,7 @@ public class UserUtil {
 
     public static void checkUserPresence(String login) {
         if (userService.getUserByLogin(login) == null) {
-            throw new RuntimeException("Пользователя с таким логином не существует");
+            throw new UserNotExistException("Пользователя с таким логином не существует");
         }
     }
 }

@@ -9,14 +9,12 @@ import java.util.UUID;
 
 @Data
 public class CryptoAccount {
-    @NonNull
     private String login;
-    @NonNull
     private CoinType coinType;
-    private BigDecimal balanceCoin;
-    private UUID uuid;
+    private BigDecimal balanceCoin = BigDecimal.ZERO;
+    private UUID uuid = UUID.randomUUID();
 
-    public CryptoAccount(@NotNull String login, @NotNull CoinType coinType) {
+    public CryptoAccount(String login, CoinType coinType) {
         this.login = login;
         this.coinType = coinType;
     }

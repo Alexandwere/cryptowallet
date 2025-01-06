@@ -2,6 +2,9 @@ package com.javaacademy.cryptowallet.service;
 
 import com.javaacademy.cryptowallet.dto.CryptoAccountDto;
 import com.javaacademy.cryptowallet.entity.CryptoAccount;
+import com.javaacademy.cryptowallet.exception.IncorrectAmountException;
+import com.javaacademy.cryptowallet.exception.UserDontHaveAccountException;
+import com.javaacademy.cryptowallet.exception.UserNotExistException;
 import com.javaacademy.cryptowallet.mapper.CryptoAccountMapper;
 import com.javaacademy.cryptowallet.repository.CryptoAccountRepository;
 import com.javaacademy.cryptowallet.service.conversionService.ConversionCoinService;
@@ -12,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
@@ -32,16 +36,24 @@ public class CryptoAccountService {
      Поиск всех криптосчетов пользователя
      */
     public List<CryptoAccountDto> findAllForUser(String login) {
-        UserUtil.checkUserPresence(login);
-        List<CryptoAccountDto> result = cryptoAccountRepository.findAllForUser(login).stream()
-                .map(cryptoAccountMapper::convertToDto).toList();
+        try {
+            UserUtil.checkUserPresence(login);
+        } catch (UserNotExistException e) {
+            return new ArrayList<>(List.of(new CryptoAccountDto(e.getMessage(), "")));
+        }
+        List<CryptoAccountDto> result = new ArrayList<>(cryptoAccountRepository.findAllForUser(login).stream()
+                .map(cryptoAccountMapper::convertToDto).toList());
         if (result.isEmpty()) {
-            CryptoAccountDto notExistAccount = new CryptoAccountDto("Счетов у пользователя %s не обнаружено"
+            CryptoAccountDto notExistCryptoAccount = new CryptoAccountDto("Счетов у пользователя %s не обнаружено"
                     .formatted(login), "");
+            result.add(notExistCryptoAccount);
         }
         return result;
     }
 
+    /**
+     Создание криптосчёта
+     */
     public UUID createCryptoAccount(@NonNull CryptoAccountDto cryptoAccountDto) {
         UserUtil.checkUserPresence(cryptoAccountDto.getLogin());
         CryptoAccount account = cryptoAccountMapper.convertToAccount(cryptoAccountDto);
@@ -62,7 +74,11 @@ public class CryptoAccountService {
      Снять рубли со счёта
      */
     public String withdrawRub(UUID uuid, BigDecimal countRub) {
-        checkAmount(countRub);
+        try {
+            checkAmount(countRub);
+        } catch (IncorrectAmountException e) {
+            return e.getMessage();
+        }
         CryptoAccount account = cryptoAccountRepository.findAccount(uuid);
         BigDecimal countWithdrawalCoin = valueCoin(account, countRub);
         if (account.getBalanceCoin().compareTo(countWithdrawalCoin) < 0) {
@@ -89,7 +105,7 @@ public class CryptoAccountService {
         UserUtil.checkUserPresence(login);
         List<CryptoAccount> accountsByLogin = cryptoAccountRepository.findAllForUser(login);
         if (accountsByLogin.isEmpty()) {
-            throw new RuntimeException("У пользователя нет счетов");
+            throw new UserDontHaveAccountException("У пользователя нет счетов");
         }
         AtomicReference<BigDecimal> balanceCoin = new AtomicReference<>(BigDecimal.ZERO);
         accountsByLogin.forEach(e -> balanceCoin.set(balanceCoin.get().add(balanceRub(e.getUuid()))));
@@ -110,7 +126,7 @@ public class CryptoAccountService {
      */
     private void checkAmount(BigDecimal value) {
         if (value.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new RuntimeException("Нельзя ввести отрицательную сумма");
+            throw new IncorrectAmountException("Нельзя ввести отрицательную сумму");
         }
     }
 

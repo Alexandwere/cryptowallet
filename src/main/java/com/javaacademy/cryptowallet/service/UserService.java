@@ -16,6 +16,9 @@ public class UserService {
     private final UserMapper userMapper;
 
     public void saveUser(UserDto userDto) {
+        if (userDto.getPassword() == null || userDto.getEmail() == null) {
+            throw new RuntimeException("Отсутствует почта или пароль");
+        }
         userRepository.saveUser(userMapper.convertToUser(userDto));
     }
 

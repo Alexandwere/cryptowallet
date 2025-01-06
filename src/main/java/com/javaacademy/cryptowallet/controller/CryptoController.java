@@ -30,7 +30,7 @@ public class CryptoController {
     private final CryptoAccountService cryptoAccountService;
 
     @GetMapping()
-    @Operation(summary = "Получение всех криптосчётов пользователя",
+    @Operation(summary = "Получение всех криптосчетов пользователя",
             description = "Получение всех криптосчетов пользователя по его логину")
     public List<CryptoAccountDto> findAll(@RequestParam String login) {
         return cryptoAccountService.findAllForUser(login);
@@ -65,8 +65,6 @@ public class CryptoController {
             @ApiResponse(responseCode = "200", description = "Успешное пополнение счета"),
             @ApiResponse(responseCode = "400", description = "Некорректный формат суммы"),
             @ApiResponse(responseCode = "500", description = "Отрицательная сумма либо не найден аккаунт")
-//                            content = @Content(mediaType = "application/json",
-//                            schema = @Schema(implementation = ErrorDto.class))
     })
     public void refill(@RequestBody RefillWithdrawBodyDto bodyDto) {
         cryptoAccountService.topUpInRub(UUID.fromString(bodyDto.getUuid()), bodyDto.getAmountRubles());
@@ -77,7 +75,9 @@ public class CryptoController {
             description = "Снятие со счёта в рублях, требуется ID счёта и сумма в рублях")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Успешное снятие денег"),
-            @ApiResponse(responseCode = "400", description = "Пользователь не найден"),
+            @ApiResponse(responseCode = "200", description = "Операция отклонена"),
+            @ApiResponse(responseCode = "200", description = "Операция отклонена, введена отрицательная сумма"),
+            @ApiResponse(responseCode = "400", description = "Счет не найден"),
             @ApiResponse(responseCode = "500", description = "Ошибка на сервере")
     })
     public String withdraw(@RequestBody RefillWithdrawBodyDto bodyDto) {
