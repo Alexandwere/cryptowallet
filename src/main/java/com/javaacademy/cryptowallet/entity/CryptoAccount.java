@@ -1,8 +1,6 @@
 package com.javaacademy.cryptowallet.entity;
 
 import lombok.Data;
-import lombok.NonNull;
-import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 import java.util.UUID;

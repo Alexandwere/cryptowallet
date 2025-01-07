@@ -28,10 +28,6 @@ public class CryptoAccountService {
     private final ConversionCoinService conversionCoinService;
     private final ConversionRubUsdService conversionRubUsdService;
 
-    public CryptoAccountDto findAccount(UUID uuid) {
-        return cryptoAccountMapper.convertToDto(cryptoAccountRepository.findAccount(uuid));
-    }
-
     /**
      Поиск всех криптосчетов пользователя
      */

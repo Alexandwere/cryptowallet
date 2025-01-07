@@ -12,7 +12,6 @@ import io.restassured.http.ContentType;
 import io.restassured.parsing.Parser;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +22,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("local")
@@ -59,14 +56,14 @@ public class UserControllerTest {
                 .post("/signup")
                 .then()
                 .spec(responseSpecification)
-                .statusCode(201);
+                .statusCode(HttpStatus.CREATED.value());
     }
 
     @Test
     @DisplayName("Успешная смена пароля")
     public void resetPasswordSuccess() {
         userService.saveUser(userDto);
-        String Login = "Alexander";
+        String login = "Alexander";
         String email = "alexander@mail.ru";
         String password = "54321";
         ResetPasswordDto resetPasswordDto = new ResetPasswordDto("Alexander", "12345", "54321");
@@ -79,7 +76,7 @@ public class UserControllerTest {
                 .spec(responseSpecification)
                 .statusCode(HttpStatus.ACCEPTED.value());
 
-        assertEquals(Login, resultUser.getLogin());
+        assertEquals(login, resultUser.getLogin());
         assertEquals(email, resultUser.getEmail());
         assertEquals(password, resultUser.getPassword());
     }
@@ -105,6 +102,6 @@ public class UserControllerTest {
                 .patch("/reset-password")
                 .then()
                 .spec(responseSpecification)
-                .statusCode(500);
+                .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
 }

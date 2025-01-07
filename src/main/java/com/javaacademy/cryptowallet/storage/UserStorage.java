@@ -5,7 +5,6 @@ import com.javaacademy.cryptowallet.exception.UserAlreadyExistException;
 import com.javaacademy.cryptowallet.exception.UserNotExistException;
 import org.springframework.stereotype.Component;
 
-import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 

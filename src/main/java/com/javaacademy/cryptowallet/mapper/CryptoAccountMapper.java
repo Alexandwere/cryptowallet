@@ -6,10 +6,8 @@ import com.javaacademy.cryptowallet.entity.CryptoAccount;
 import com.javaacademy.cryptowallet.exception.CryptoTypeNotExistException;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class CryptoAccountMapper {

@@ -2,8 +2,6 @@ package com.javaacademy.cryptowallet.service.conversionService;
 
 import com.javaacademy.cryptowallet.entity.CoinType;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;

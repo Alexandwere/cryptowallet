@@ -21,6 +21,7 @@
 		<lombok.version>1.18.28</lombok.version>
 		<swagger.version>2.6.0</swagger.version>
 		<rest-assured-test.version>5.4.0</rest-assured-test.version>
+		<jacoco-plugin.version>0.8.12</jacoco-plugin.version>
 	</properties>
 
 	<dependencies>
@@ -111,6 +112,30 @@
 						<phase>validate</phase>
 						<goals>
 							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${jacoco-plugin.version}</version>
+				<configuration>
+					<excludes>
+						<exclude>**/*Runner*.*</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>report</goal>
 						</goals>
 					</execution>
 				</executions>

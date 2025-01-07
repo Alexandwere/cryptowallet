@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("local")
@@ -109,7 +109,7 @@ public class CryptoAccountControllerTest {
                 .statusCode(HttpStatus.OK.value())
                 .extract()
                 .body()
-                .as(new TypeRef<>() {});
+                .as(new TypeRef<>() { });
 
         assertEquals(expectedAccounts, resultAccounts.size());
     }
@@ -127,7 +127,7 @@ public class CryptoAccountControllerTest {
                 .statusCode(HttpStatus.OK.value())
                 .extract()
                 .body()
-                .as(new TypeRef<>() {});
+                .as(new TypeRef<>() { });
 
         assertEquals(expectedLogin, resultAccounts.get(expectedIndex).getLogin());
         }
@@ -146,7 +146,7 @@ public class CryptoAccountControllerTest {
                 .statusCode(HttpStatus.OK.value())
                 .extract()
                 .body()
-                .as(new TypeRef<>() {});
+                .as(new TypeRef<>() { });
 
         assertEquals(expectedLogin, resultAccounts.get(expectedIndex).getLogin());
     }
