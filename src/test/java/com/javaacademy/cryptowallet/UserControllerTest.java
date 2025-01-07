@@ -104,4 +104,5 @@ public class UserControllerTest {
                 .spec(responseSpecification)
                 .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
+
 }

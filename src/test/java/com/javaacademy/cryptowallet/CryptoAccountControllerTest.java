@@ -48,7 +48,7 @@ public class CryptoAccountControllerTest {
     private final BigDecimal testAmount = BigDecimal.TEN;
     private final BigDecimal testAmount2 = BigDecimal.ZERO;
     private final String testLogin2 = "Alexander2";
-    private final String testCoinType = "bitcoin";
+    private final String bitcoinType = "bitcoin";
     private final String failedCoinType = "failcoin";
 
     @Autowired
@@ -73,7 +73,7 @@ public class CryptoAccountControllerTest {
     @DisplayName("Успешная регистрация криптосчета")
     public void createCryptoAccountSuccess() {
         userStorage.saveUser(new User(testLogin, testEmail, testPassword));
-        CryptoAccountDto cryptoAccountDto = new CryptoAccountDto(testLogin, testCoinType);
+        CryptoAccountDto cryptoAccountDto = new CryptoAccountDto(testLogin, bitcoinType);
         given(requestSpecification)
                 .body(cryptoAccountDto)
                 .post()
