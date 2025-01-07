@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Schema(description = "Тело для пополнения и снятия в рублях")
-public class RefillWithdrawBodyDto {
+public class OperationMoneyBodyDto {
     @Schema(description = "Уникальный номер пользователя")
     @JsonProperty("account_id")
     @NonNull

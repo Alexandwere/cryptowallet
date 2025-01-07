@@ -1,6 +1,7 @@
 package com.javaacademy.cryptowallet.service.conversionService;
 
 import com.javaacademy.cryptowallet.entity.CoinType;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
+@Getter
 @Service
 @Profile("local")
 public class LocalConversionCoinServiceImp implements ConversionCoinService {

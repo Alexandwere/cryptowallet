@@ -105,7 +105,8 @@ public class CryptoAccountService {
         UserUtil.checkUserPresence(login);
         List<CryptoAccount> accountsByLogin = cryptoAccountRepository.findAllForUser(login);
         if (accountsByLogin.isEmpty()) {
-            throw new UserDontHaveAccountException("У пользователя нет счетов");
+            throw new UserDontHaveAccountException("Счетов у пользователя %s не обнаружено"
+                    .formatted(login));
         }
         AtomicReference<BigDecimal> balanceCoin = new AtomicReference<>(BigDecimal.ZERO);
         accountsByLogin.forEach(e -> balanceCoin.set(balanceCoin.get().add(balanceRub(e.getUuid()))));

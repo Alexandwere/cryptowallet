@@ -1,5 +1,7 @@
 package com.javaacademy.cryptowallet.service.conversionService;
 
+import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
+@Getter
 @Service
 @Profile("local")
 public class LocalConversionRubUsdServiceImp implements ConversionRubUsdService {

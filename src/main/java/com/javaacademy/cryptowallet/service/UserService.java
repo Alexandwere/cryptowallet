@@ -3,6 +3,7 @@ package com.javaacademy.cryptowallet.service;
 import com.javaacademy.cryptowallet.dto.ResetPasswordDto;
 import com.javaacademy.cryptowallet.dto.UserDto;
 import com.javaacademy.cryptowallet.entity.User;
+import com.javaacademy.cryptowallet.exception.UserNotExistException;
 import com.javaacademy.cryptowallet.mapper.UserMapper;
 import com.javaacademy.cryptowallet.repository.UserRepository;
 import com.javaacademy.cryptowallet.service.util.UserUtil;
@@ -23,11 +24,7 @@ public class UserService {
     }
 
     public UserDto getUserByLogin(String login) {
-        try {
-            return userMapper.convertToUserDto(userRepository.getUserByLogin(login));
-        } catch (Exception e) {
-            return UserDto.builder().login("Пользователь не существует").build();
-        }
+        return userMapper.convertToUserDto(userRepository.getUserByLogin(login));
     }
 
     public void resetPassword(ResetPasswordDto resetPasswordDto) {

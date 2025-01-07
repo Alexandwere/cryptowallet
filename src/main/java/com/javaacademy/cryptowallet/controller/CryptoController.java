@@ -1,7 +1,7 @@
 package com.javaacademy.cryptowallet.controller;
 
 import com.javaacademy.cryptowallet.dto.CryptoAccountDto;
-import com.javaacademy.cryptowallet.dto.RefillWithdrawBodyDto;
+import com.javaacademy.cryptowallet.dto.OperationMoneyBodyDto;
 import com.javaacademy.cryptowallet.service.CryptoAccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -66,7 +66,7 @@ public class CryptoController {
             @ApiResponse(responseCode = "400", description = "Некорректный формат суммы"),
             @ApiResponse(responseCode = "500", description = "Отрицательная сумма либо не найден аккаунт")
     })
-    public void refill(@RequestBody RefillWithdrawBodyDto bodyDto) {
+    public void refill(@RequestBody OperationMoneyBodyDto bodyDto) {
         cryptoAccountService.topUpInRub(UUID.fromString(bodyDto.getUuid()), bodyDto.getAmountRubles());
     }
 
@@ -75,12 +75,12 @@ public class CryptoController {
             description = "Снятие со счёта в рублях, требуется ID счёта и сумма в рублях")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Успешное снятие денег"),
-            @ApiResponse(responseCode = "200", description = "Операция отклонена"),
+            @ApiResponse(responseCode = "200", description = "Операция отклонена, недостаточно средств"),
             @ApiResponse(responseCode = "200", description = "Операция отклонена, введена отрицательная сумма"),
             @ApiResponse(responseCode = "400", description = "Счет не найден"),
             @ApiResponse(responseCode = "500", description = "Ошибка на сервере")
     })
-    public String withdraw(@RequestBody RefillWithdrawBodyDto bodyDto) {
+    public String withdraw(@RequestBody OperationMoneyBodyDto bodyDto) {
         return cryptoAccountService.withdrawRub(UUID.fromString(bodyDto.getUuid()), bodyDto.getAmountRubles());
     }
 
