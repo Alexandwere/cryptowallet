@@ -1,4 +1,4 @@
-package com.javaacademy.cryptowallet.service.conversionService;
+package com.javaacademy.cryptowallet.service.conversionService.conversionRubUsdService;
 
 import lombok.NonNull;
 

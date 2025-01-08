@@ -4,6 +4,8 @@ import com.javaacademy.cryptowallet.dto.ResetPasswordDto;
 import com.javaacademy.cryptowallet.dto.UserDto;
 import com.javaacademy.cryptowallet.service.userService.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,6 +27,10 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Регистрация пользователя",
             description = "Регистрация пользователя, требуется логин, эл. почта и пароль")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Успешная регистрация пользователя"),
+            @ApiResponse(responseCode = "500", description = "Отказ в регистрации, логин занят")
+    })
     public void save(@RequestBody UserDto userDto) {
         userService.saveUser(userDto);
     }
@@ -33,6 +39,10 @@ public class UserController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     @Operation(summary = "Смена пароля",
             description = "Смена пароля пользователя, требуется логин, старый пароль, новый пароль")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Успешная смена пароля"),
+            @ApiResponse(responseCode = "500", description = "Неверный старый пароль")
+    })
     public void resetPassword(@RequestBody ResetPasswordDto resetPasswordDto) {
         userService.resetPassword(resetPasswordDto);
     }

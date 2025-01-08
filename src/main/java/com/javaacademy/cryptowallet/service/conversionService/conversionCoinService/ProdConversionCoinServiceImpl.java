@@ -1,4 +1,4 @@
-package com.javaacademy.cryptowallet.service.conversionService;
+package com.javaacademy.cryptowallet.service.conversionService.conversionCoinService;
 
 import com.javaacademy.cryptowallet.config.ConversionProperties;
 import com.javaacademy.cryptowallet.entity.CoinType;
@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 @Service
 @Profile("prod")
 @AllArgsConstructor
-public class ConversionCoinServiceImpl implements ConversionCoinService {
+public class ProdConversionCoinServiceImpl implements ConversionCoinService {
     private static final String CURRENCY = "usd";
     private static final String REQUEST_PART = "/simple/price?ids=";
     private static final String CURRENCY_PARAMETER = "&vs_currencies=usd";

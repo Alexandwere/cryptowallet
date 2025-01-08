@@ -32,6 +32,11 @@ public class CryptoController {
     @GetMapping()
     @Operation(summary = "Получение всех криптосчетов пользователя",
             description = "Получение всех криптосчетов пользователя по его логину")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Успешное получение счетов"),
+            @ApiResponse(responseCode = "500", description = "Несуществующий пользователь "
+                    + "или отсутствие счетов у пользователя")
+    })
     public List<CryptoAccountDto> findAll(@RequestParam String login) {
         return cryptoAccountService.findAllForUser(login);
     }
@@ -39,6 +44,10 @@ public class CryptoController {
     @GetMapping("/balance/{id}")
     @Operation(summary = "Получение баланса счёта в рублях",
             description = "Получение баланса счёта по ID в рублях")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Успешное получение баланса"),
+            @ApiResponse(responseCode = "500", description = "Несуществующий счёт")
+    })
     public BigDecimal getBalance(@PathVariable String id) {
         return cryptoAccountService.balanceRub(UUID.fromString(id));
     }
@@ -46,6 +55,11 @@ public class CryptoController {
     @GetMapping("/balance")
     @Operation(summary = "Получение баланса всех счетов пользователя",
             description = "Получение баланса всех криптосчетов пользователя, требуется логин")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Успешное получение баланса"),
+            @ApiResponse(responseCode = "500", description = "Несуществующий пользователь "
+                    + "или отсутствие счёта у пользователя")
+    })
     public BigDecimal getAllBalance(@RequestParam String login) {
         return cryptoAccountService.allBalanceRub(login);
     }

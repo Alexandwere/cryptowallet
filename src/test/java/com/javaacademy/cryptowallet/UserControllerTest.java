@@ -60,6 +60,17 @@ public class UserControllerTest {
     }
 
     @Test
+    @DisplayName("Регистрация пользователя - ошибка")
+    public void saveUserFailed() {
+        userService.saveUser(userDto);
+        given(requestSpecification)
+                .body(userDto)
+                .post("/signup")
+                .then()
+                .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+    }
+
+    @Test
     @DisplayName("Успешная смена пароля")
     public void resetPasswordSuccess() {
         userService.saveUser(userDto);
@@ -79,17 +90,6 @@ public class UserControllerTest {
         assertEquals(login, resultUser.getLogin());
         assertEquals(email, resultUser.getEmail());
         assertEquals(password, resultUser.getPassword());
-    }
-
-    @Test
-    @DisplayName("Регистрация пользователя - ошибка")
-    public void saveUserFailed() {
-        userService.saveUser(userDto);
-        given(requestSpecification)
-                .body(userDto)
-                .post("/signup")
-                .then()
-                .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
 
     @Test

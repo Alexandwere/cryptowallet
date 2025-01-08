@@ -5,8 +5,8 @@ import com.javaacademy.cryptowallet.dto.OperationMoneyBodyDto;
 import com.javaacademy.cryptowallet.entity.CoinType;
 import com.javaacademy.cryptowallet.entity.CryptoAccount;
 import com.javaacademy.cryptowallet.entity.User;
-import com.javaacademy.cryptowallet.service.conversionService.ConversionCoinService;
-import com.javaacademy.cryptowallet.service.conversionService.ConversionRubUsdService;
+import com.javaacademy.cryptowallet.service.conversionService.conversionCoinService.ConversionCoinService;
+import com.javaacademy.cryptowallet.service.conversionService.conversionRubUsdService.ConversionRubUsdService;
 import com.javaacademy.cryptowallet.storage.CryptoAccountStorage;
 import com.javaacademy.cryptowallet.storage.UserStorage;
 import io.restassured.builder.RequestSpecBuilder;
@@ -128,8 +128,8 @@ public class CryptoAccountControllerTest {
     }
 
     @Test
-    @DisplayName("Провальный тест получения всех счетов пользователя - не существующий пользователь")
-    public void findAllUserAccountsFailed() {
+    @DisplayName("Успешный тест получения всех счетов пользователя - не существующий пользователь")
+    public void findAllUserAccountsSuccessNotExistUser() {
         String expectedLogin = "Пользователь не существует";
         int expectedIndex = 0;
         List<CryptoAccountDto> resultAccounts = given(requestSpecification)

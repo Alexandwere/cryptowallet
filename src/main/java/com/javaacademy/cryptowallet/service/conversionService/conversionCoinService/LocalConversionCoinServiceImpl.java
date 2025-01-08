@@ -1,4 +1,4 @@
-package com.javaacademy.cryptowallet.service.conversionService;
+package com.javaacademy.cryptowallet.service.conversionService.conversionCoinService;
 
 import com.javaacademy.cryptowallet.entity.CoinType;
 import lombok.Getter;
