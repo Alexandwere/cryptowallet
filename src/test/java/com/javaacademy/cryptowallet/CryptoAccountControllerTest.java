@@ -85,7 +85,20 @@ public class CryptoAccountControllerTest {
     @Test
     @DisplayName("Регистрация криптосчета - ошибка")
     public void createCryptoAccountFailed() {
+        userStorage.saveUser(new User(testLogin, testEmail, testPassword));
         CryptoAccountDto cryptoAccountDto = new CryptoAccountDto(testLogin, failedCoinType);
+        given(requestSpecification)
+                .body(cryptoAccountDto)
+                .post()
+                .then()
+                .spec(responseSpecification)
+                .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+    }
+
+    @Test
+    @DisplayName("Регистрация криптосчета - ошибка, не существующий пользователь")
+    public void createCryptoAccountFailedCauseUser() {
+        CryptoAccountDto cryptoAccountDto = new CryptoAccountDto(testLogin, bitcoinType);
         given(requestSpecification)
                 .body(cryptoAccountDto)
                 .post()

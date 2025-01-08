@@ -2,7 +2,7 @@ package com.javaacademy.cryptowallet.controller;
 
 import com.javaacademy.cryptowallet.dto.ResetPasswordDto;
 import com.javaacademy.cryptowallet.dto.UserDto;
-import com.javaacademy.cryptowallet.service.UserService;
+import com.javaacademy.cryptowallet.service.userService.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

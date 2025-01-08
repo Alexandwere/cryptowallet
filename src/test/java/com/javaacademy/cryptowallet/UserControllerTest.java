@@ -4,7 +4,7 @@ import com.javaacademy.cryptowallet.dto.ResetPasswordDto;
 import com.javaacademy.cryptowallet.dto.UserDto;
 import com.javaacademy.cryptowallet.entity.User;
 import com.javaacademy.cryptowallet.repository.UserRepository;
-import com.javaacademy.cryptowallet.service.UserService;
+import com.javaacademy.cryptowallet.service.userService.UserServiceImpl;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.filter.log.LogDetail;
@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class UserControllerTest {
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userService;
     @Autowired
     private UserRepository userRepository;
     private final RequestSpecification requestSpecification = new RequestSpecBuilder()

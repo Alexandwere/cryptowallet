@@ -2,7 +2,7 @@ package com.javaacademy.cryptowallet.controller;
 
 import com.javaacademy.cryptowallet.dto.CryptoAccountDto;
 import com.javaacademy.cryptowallet.dto.OperationMoneyBodyDto;
-import com.javaacademy.cryptowallet.service.CryptoAccountService;
+import com.javaacademy.cryptowallet.service.cryptoAccountService.CryptoAccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -54,6 +54,11 @@ public class CryptoController {
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Создание криптосчёта",
             description = "Создание крипточсёта, требуется логин и тип криптовалюты")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Успешное пополнение счета"),
+            @ApiResponse(responseCode = "500", description = "Несуществующий пользователь "
+                    + "или несуществующий тип криптовалюты")
+    })
     public UUID createCryptoAccount(@RequestBody CryptoAccountDto accountDto) {
         return cryptoAccountService.createCryptoAccount(accountDto);
     }
@@ -67,7 +72,7 @@ public class CryptoController {
             @ApiResponse(responseCode = "500", description = "Отрицательная сумма либо не найден аккаунт")
     })
     public void refill(@RequestBody OperationMoneyBodyDto bodyDto) {
-        cryptoAccountService.topUpInRub(UUID.fromString(bodyDto.getUuid()), bodyDto.getAmountRubles());
+        cryptoAccountService.topUpInRub(bodyDto);
     }
 
     @PostMapping("/withdrawal")
@@ -81,7 +86,7 @@ public class CryptoController {
             @ApiResponse(responseCode = "500", description = "Ошибка на сервере")
     })
     public String withdraw(@RequestBody OperationMoneyBodyDto bodyDto) {
-        return cryptoAccountService.withdrawRub(UUID.fromString(bodyDto.getUuid()), bodyDto.getAmountRubles());
+        return cryptoAccountService.withdrawRub(bodyDto);
     }
 
 }

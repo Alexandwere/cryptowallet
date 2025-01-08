@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 @Service
 @Profile("prod")
 @AllArgsConstructor
-public class ConversionCoinServiceImp implements ConversionCoinService {
+public class ConversionCoinServiceImpl implements ConversionCoinService {
     private static final String CURRENCY = "usd";
     private static final String REQUEST_PART = "/simple/price?ids=";
     private static final String CURRENCY_PARAMETER = "&vs_currencies=usd";

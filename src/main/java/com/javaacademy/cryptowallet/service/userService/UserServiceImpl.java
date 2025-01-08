@@ -1,16 +1,17 @@
-package com.javaacademy.cryptowallet.service;
+package com.javaacademy.cryptowallet.service.userService;
 
 import com.javaacademy.cryptowallet.dto.ResetPasswordDto;
 import com.javaacademy.cryptowallet.dto.UserDto;
 import com.javaacademy.cryptowallet.entity.User;
 import com.javaacademy.cryptowallet.mapper.UserMapper;
 import com.javaacademy.cryptowallet.repository.UserRepository;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
@@ -21,7 +22,7 @@ public class UserService {
         userRepository.saveUser(userMapper.convertToUser(userDto));
     }
 
-    public UserDto getUserByLogin(String login) {
+    public UserDto getUserByLogin(@NonNull String login) {
         return userMapper.convertToUserDto(userRepository.getUserByLogin(login));
     }
 

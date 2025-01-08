@@ -1,7 +1,7 @@
 package com.javaacademy.cryptowallet.service.util;
 
 import com.javaacademy.cryptowallet.exception.UserNotExistException;
-import com.javaacademy.cryptowallet.service.UserService;
+import com.javaacademy.cryptowallet.service.userService.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

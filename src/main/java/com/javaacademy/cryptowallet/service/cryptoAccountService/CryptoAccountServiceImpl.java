@@ -1,6 +1,7 @@
-package com.javaacademy.cryptowallet.service;
+package com.javaacademy.cryptowallet.service.cryptoAccountService;
 
 import com.javaacademy.cryptowallet.dto.CryptoAccountDto;
+import com.javaacademy.cryptowallet.dto.OperationMoneyBodyDto;
 import com.javaacademy.cryptowallet.entity.CryptoAccount;
 import com.javaacademy.cryptowallet.exception.IncorrectAmountException;
 import com.javaacademy.cryptowallet.exception.UserDontHaveAccountException;
@@ -22,7 +23,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @RequiredArgsConstructor
-public class CryptoAccountService {
+public class CryptoAccountServiceImpl implements CryptoAccountService {
     private final CryptoAccountRepository cryptoAccountRepository;
     private final CryptoAccountMapper cryptoAccountMapper;
     private final ConversionCoinService conversionCoinService;
@@ -31,7 +32,7 @@ public class CryptoAccountService {
     /**
      Поиск всех криптосчетов пользователя
      */
-    public List<CryptoAccountDto> findAllForUser(String login) {
+    public List<CryptoAccountDto> findAllForUser(@NonNull String login) {
         try {
             UserUtil.checkUserPresence(login);
         } catch (UserNotExistException e) {
@@ -50,7 +51,7 @@ public class CryptoAccountService {
     /**
      Создание криптосчёта
      */
-    public UUID createCryptoAccount(@NonNull CryptoAccountDto cryptoAccountDto) {
+    public UUID createCryptoAccount(CryptoAccountDto cryptoAccountDto) {
         UserUtil.checkUserPresence(cryptoAccountDto.getLogin());
         CryptoAccount account = cryptoAccountMapper.convertToAccount(cryptoAccountDto);
         cryptoAccountRepository.saveCryptoAccount(account);
@@ -60,7 +61,9 @@ public class CryptoAccountService {
     /**
      Пополнение счёта в рублях
      */
-    public void topUpInRub(UUID uuid, BigDecimal countRub) {
+    public void topUpInRub(OperationMoneyBodyDto bodyDto) {
+        BigDecimal countRub = bodyDto.getAmountRubles();
+        UUID uuid = UUID.fromString(bodyDto.getUuid());
         checkAmount(countRub);
         CryptoAccount account = cryptoAccountRepository.findAccount(uuid);
         account.setBalanceCoin(account.getBalanceCoin().add(valueCoin(account, countRub)));
@@ -69,7 +72,9 @@ public class CryptoAccountService {
     /**
      Снять рубли со счёта
      */
-    public String withdrawRub(UUID uuid, BigDecimal countRub) {
+    public String withdrawRub(OperationMoneyBodyDto bodyDto) {
+        BigDecimal countRub = bodyDto.getAmountRubles();
+        UUID uuid = UUID.fromString(bodyDto.getUuid());
         try {
             checkAmount(countRub);
         } catch (IncorrectAmountException e) {

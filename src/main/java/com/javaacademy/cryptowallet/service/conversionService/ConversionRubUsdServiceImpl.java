@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 @Service
 @Profile("prod")
 @AllArgsConstructor
-public class ConversionRubUsdServiceImp implements ConversionRubUsdService {
+public class ConversionRubUsdServiceImpl implements ConversionRubUsdService {
     private static final String CRB_URL = "https://www.cbr-xml-daily.ru/latest.js";
     private static final String RATES = "rates";
     private static final String CURRENCY = "USD";

@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @Getter
 @Service
 @Profile("local")
-public class LocalConversionRubUsdServiceImp implements ConversionRubUsdService {
+public class LocalConversionRubUsdServiceImpl implements ConversionRubUsdService {
     @Value("${app.exchange.standard-usd-cost}")
     private BigDecimal standardPrice;
 

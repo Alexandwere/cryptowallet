@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @Getter
 @Service
 @Profile("local")
-public class LocalConversionCoinServiceImp implements ConversionCoinService {
+public class LocalConversionCoinServiceImpl implements ConversionCoinService {
     @Value("${app.exchange.standard-coin-cost}")
     private BigDecimal standardCost;
 
