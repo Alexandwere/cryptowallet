@@ -25,7 +25,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/cryptowallet")
 @RequiredArgsConstructor
-@Tag(name = "Контроллер для работы с криптосчетами", description = "Содержит комады для управления криптосчетами")
+@Tag(name = "Контроллер для работы с криптосчетами", description = "Содержит команды для управления криптосчетами")
 public class CryptoController {
     private final CryptoAccountService cryptoAccountService;
 
@@ -69,7 +69,7 @@ public class CryptoController {
     @Operation(summary = "Создание криптосчёта",
             description = "Создание крипточсёта, требуется логин и тип криптовалюты")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Успешное пополнение счета"),
+            @ApiResponse(responseCode = "201", description = "Успешное пополнение счета"),
             @ApiResponse(responseCode = "500", description = "Несуществующий пользователь "
                     + "или несуществующий тип криптовалюты")
     })

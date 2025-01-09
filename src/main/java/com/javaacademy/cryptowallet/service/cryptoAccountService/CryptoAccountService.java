@@ -10,8 +10,4 @@ import java.util.UUID;
 public interface CryptoAccountService {
     List<CryptoAccountDto> findAllForUser(String login);
     UUID createCryptoAccount(CryptoAccountDto cryptoAccountDto);
-    void topUpInRub(OperationMoneyBodyDto bodyDto);
-    String withdrawRub(OperationMoneyBodyDto bodyDto);
-    BigDecimal balanceRub(UUID uuid);
-    BigDecimal allBalanceRub(String login);
 }

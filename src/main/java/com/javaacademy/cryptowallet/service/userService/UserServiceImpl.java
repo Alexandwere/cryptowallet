@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
         userRepository.saveUser(userMapper.convertToUser(userDto));
     }
 
-    public UserDto getUserByLogin(@NonNull String login) {
+    public UserDto getUserByLogin(String login) {
         return userMapper.convertToUserDto(userRepository.getUserByLogin(login));
     }
 

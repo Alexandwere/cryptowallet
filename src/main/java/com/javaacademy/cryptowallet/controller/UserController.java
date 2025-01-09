@@ -28,7 +28,7 @@ public class UserController {
     @Operation(summary = "Регистрация пользователя",
             description = "Регистрация пользователя, требуется логин, эл. почта и пароль")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Успешная регистрация пользователя"),
+            @ApiResponse(responseCode = "201", description = "Успешная регистрация пользователя"),
             @ApiResponse(responseCode = "500", description = "Отказ в регистрации, логин занят")
     })
     public void save(@RequestBody UserDto userDto) {
@@ -40,7 +40,7 @@ public class UserController {
     @Operation(summary = "Смена пароля",
             description = "Смена пароля пользователя, требуется логин, старый пароль, новый пароль")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Успешная смена пароля"),
+            @ApiResponse(responseCode = "202", description = "Успешная смена пароля"),
             @ApiResponse(responseCode = "500", description = "Неверный старый пароль")
     })
     public void resetPassword(@RequestBody ResetPasswordDto resetPasswordDto) {

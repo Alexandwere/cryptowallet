@@ -54,6 +54,8 @@ public class CryptoAccountServiceImpl implements CryptoAccountService {
     public UUID createCryptoAccount(CryptoAccountDto cryptoAccountDto) {
         UserUtil.checkUserPresence(cryptoAccountDto.getLogin());
         CryptoAccount account = cryptoAccountMapper.convertToAccount(cryptoAccountDto);
+        account.setUuid(UUID.randomUUID());
+        account.setBalanceCoin(BigDecimal.ZERO);
         cryptoAccountRepository.saveCryptoAccount(account);
         return account.getUuid();
     }
