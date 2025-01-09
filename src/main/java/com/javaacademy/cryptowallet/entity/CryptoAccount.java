@@ -9,8 +9,8 @@ import java.util.UUID;
 public class CryptoAccount {
     private String login;
     private CoinType coinType;
-    private BigDecimal balanceCoin;
-    private UUID uuid;
+    private BigDecimal balanceCoin = BigDecimal.ZERO;
+    private UUID uuid = UUID.randomUUID();
 
     public CryptoAccount(String login, CoinType coinType) {
         this.login = login;
